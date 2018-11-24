@@ -5,6 +5,7 @@ module Todo
       BASE_URI = 'http://todoable.teachable.tech/api/lists'
 
       def headers
+        raise "Authorization token required" unless params[:token]
         { 'Authorization' => "Token token=\"#{params[:token]}\"" }
       end
 
