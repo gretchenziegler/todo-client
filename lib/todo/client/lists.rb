@@ -1,6 +1,6 @@
 module Todo
   module Client
-    module Lists
+    class Lists
       include Configuration
 
       def initialize(params)
@@ -21,7 +21,11 @@ module Todo
       end
 
       def create
-        # error or success message
+        HTTParty.post(
+          BASE_URI,
+          body: list_content,
+          headers: headers
+        )
       end
 
       private
@@ -34,14 +38,6 @@ module Todo
             BASE_URI,
             headers: headers
           )
-      end
-
-      def create_list
-        HTTParty.post(
-          BASE_URI,
-          body: list_content,
-          headers: headers
-        ) 
       end
 
     end

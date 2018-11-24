@@ -5,7 +5,6 @@ module Todo
 
       def initialize(params)
         @params = params
-        raise "Must specify list_id" unless params[:list_id]
       end
 
       def self.find(params)
@@ -22,30 +21,10 @@ module Todo
 
       def show
         raise UpstreamError, "Request to #{list_uri} unsuccessful" unless get_list.success?
-        list_query.parsed_response 
+        get_list.parsed_response 
       end
 
       def update
-        # error or success message
-      end
-
-      def delete
-        # error or success message
-      end
-
-      private
-
-      attr_reader :params
-
-      def get_list
-        @list_query ||= \
-          HTTParty.get(
-            list_uri,
-            headers: headers
-          )
-      end
-
-      def update_list
         HTTParty.patch(
           list_uri,
           body: list_content,
@@ -53,14 +32,27 @@ module Todo
         )
       end
 
-      def delete_list
+      def delete
         HTTParty.get(
           list_uri,
           headers: headers
         )
       end
 
+      private
+
+      attr_reader :params
+
+      def get_list
+        @get_list ||= \
+          HTTParty.get(
+            list_uri,
+            headers: headers
+          )
+      end
+
       def list_uri
+        raise "Must specify list_id" unless params[:list_id]
         sprintf("%s/%s", BASE_URI, params[:list_id])
       end
 

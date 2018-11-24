@@ -20,20 +20,6 @@ module Todo
       end
 
       def create
-        # error or success message
-      end
-
-      def complete
-        # error or success message
-      end
-
-      def delete
-        # error or success message
-      end
-
-      private
-
-      def create_item
         HTTParty.post(
           list_items_uri,
           body: item_content,
@@ -41,19 +27,23 @@ module Todo
         )
       end
 
-      def complete_item
+      def complete
         HTTParty.put(
           complete_item_uri,
           headers: headers
         )
       end
 
-      def delete_item
+      def delete
         HTTParty.delete(
           item_uri,
           headers: headers
         )
       end
+
+      private
+
+      attr_reader :params
 
       def item_content
         { item: content }.to_json
@@ -64,10 +54,12 @@ module Todo
       end
 
       def item_uri
+        raise "Must specify item_id" unless params[:item_id]
         sprintf("%s/%s", list_items_uri, params[:item_id])
       end
 
       def list_items_uri
+        raise "Must specify list_id" unless params[:list_id]
         sprintf("%s/%s/items", BASE_URI, params[:list_id])
       end
 

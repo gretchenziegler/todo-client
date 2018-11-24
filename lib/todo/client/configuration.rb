@@ -4,7 +4,6 @@ module Todo
 
       BASE_URI = 'http://todoable.teachable.tech/api/lists'
 
-      # TODO Check if token escape works this way
       def headers
         { 'Authorization' => "Token token=\"#{params[:token]}\"" }
       end
